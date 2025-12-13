@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tik Tak Top Course</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      :root {
+        --bg: #0b1220; /* navy dark */
+        --surface: rgba(255, 255, 255, 0.08);
+        --surface2: rgba(255, 255, 255, 0.12);
+        --text: #eaf2ff;
+        --muted: rgba(234, 242, 255, 0.78);
+        --brand: #18c6b6; /* teal */
+        --brand2: #4aa3ff; /* blue accent */
+        --danger: #ff4d6d;
+        --shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
+        --radius: 18px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        color: var(--text);
+        background: radial-gradient(
+            1200px 600px at 10% 10%,
+            rgba(24, 198, 182, 0.25),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 500px at 90% 20%,
+            rgba(74, 163, 255, 0.2),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 500px at 50% 110%,
+            rgba(255, 77, 109, 0.1),
+            transparent 60%
+          ),
+          linear-gradient(180deg, #070b14 0%, var(--bg) 60%, #070b14 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* ===== NAVBAR ===== */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: 14px 18px;
+        background: rgba(11, 18, 32, 0.65);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .nav-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+
+      .brand-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(
+          135deg,
+          rgba(24, 198, 182, 0.9),
+          rgba(74, 163, 255, 0.9)
+        );
+        box-shadow: 0 10px 30px rgba(24, 198, 182, 0.15);
+      }
+
+      .brand small {
+        display: block;
+        font-weight: 600;
+        opacity: 0.8;
+        letter-spacing: 0;
+      }
+
+      .menu {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .menu a {
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 12px;
+        border-radius: 12px;
+        transition: 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .menu a:hover {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+      }
+
+      /* Dropdown */
+      .dropdown {
+        position: relative;
+      }
+      .drop {
+        cursor: pointer;
+        user-select: none;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 48px;
+        min-width: 230px;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .dropdown-content a {
+        display: flex;
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 0;
+      }
+      .dropdown-content a:hover {
+        background: rgba(24, 198, 182, 0.12);
+      }
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      /* ===== HERO / JUMBOTRON ===== */
+      .hero {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 54px 18px 26px;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 22px;
+        align-items: center;
+      }
+
+      .hero-card {
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-card:before {
+        content: "";
+        position: absolute;
+        inset: -80px;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(24, 198, 182, 0.28),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 70% 40%,
+            rgba(74, 163, 255, 0.22),
+            transparent 45%
+          );
+        filter: blur(10px);
+      }
+
+      .hero-card > * {
+        position: relative;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--muted);
+        font-weight: 700;
+        width: fit-content;
+        margin-bottom: 14px;
+      }
+
+      .hero h1 {
+        font-size: 40px;
+        line-height: 1.15;
+        margin-bottom: 12px;
+        letter-spacing: -0.6px;
+      }
+
+      .hero p {
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 16px;
+      }
+
+      .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      .btn {
+        border: none;
+        cursor: pointer;
+        padding: 12px 16px;
+        border-radius: 14px;
+        font-weight: 800;
+        transition: 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-primary {
+        color: #041014;
+        background: linear-gradient(135deg, var(--brand), var(--brand2));
+        box-shadow: 0 18px 50px rgba(24, 198, 182, 0.22);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        filter: saturate(1.05);
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .btn-ghost:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      .hero-side {
+        display: grid;
+        gap: 14px;
+      }
+
+      .stat {
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+        padding: 18px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+
+      .stat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: rgba(24, 198, 182, 0.14);
+        border: 1px solid rgba(24, 198, 182, 0.18);
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+      }
+
+      .stat b {
+        display: block;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      /* ===== SECTION ===== */
+      section {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 44px 18px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+
+      .section-title h2 {
+        font-size: 26px;
+        letter-spacing: -0.2px;
+      }
+
+      .section-title p {
+        color: var(--muted);
+        max-width: 520px;
+        line-height: 1.6;
+        font-size: 14px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+
+      /* ===== FORM ===== */
+      .form {
+        display: grid;
+        gap: 12px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .field label {
+        display: block;
+        font-weight: 800;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: rgba(234, 242, 255, 0.92);
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        outline: none;
+        transition: 0.2s ease;
+      }
+
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: rgba(24, 198, 182, 0.45);
+        box-shadow: 0 0 0 4px rgba(24, 198, 182, 0.12);
+      }
+
+      .field textarea {
+        min-height: 98px;
+        resize: none;
+      }
+
+      /* Fix dropdown putih */
+      .field select option {
+        background-color: #0f172a;
+        color: #eaf2ff;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+
+      .btn-submit {
+        background: linear-gradient(135deg, var(--brand), var(--brand2));
+        color: #041014;
+        font-weight: 900;
+        padding: 12px 16px;
+        border-radius: 14px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 18px 50px rgba(24, 198, 182, 0.22);
+        transition: 0.2s ease;
+      }
+      .btn-submit:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-reset {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 12px 16px;
+        border-radius: 14px;
+        cursor: pointer;
+        font-weight: 800;
+        transition: 0.2s ease;
+      }
+      .btn-reset:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      /* ===== KELAS ===== */
+      .kelas {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 14px;
+        margin-top: 10px;
+      }
+
+      .kelas-card {
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+        transition: 0.22s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .kelas-card:before {
+        content: "";
+        position: absolute;
+        inset: -60px;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(24, 198, 182, 0.14),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 80% 30%,
+            rgba(74, 163, 255, 0.12),
+            transparent 55%
+          );
+        filter: blur(10px);
+        opacity: 0;
+        transition: 0.22s ease;
+      }
+
+      .kelas-card:hover {
+        transform: translateY(-6px);
+      }
+      .kelas-card:hover:before {
+        opacity: 1;
+      }
+
+      .kelas-card h3 {
+        position: relative;
+        font-size: 16px;
+        margin-bottom: 6px;
+        letter-spacing: -0.2px;
+      }
+      .kelas-card p {
+        position: relative;
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.6;
+      }
+
+      .tag {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 12px;
+        color: rgba(234, 242, 255, 0.85);
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: fit-content;
+      }
+
+      /* ===== KOLEKSI ===== */
+      .koleksi {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+      }
+      .koleksi-item {
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+        transition: 0.22s ease;
+      }
+      .koleksi-item:hover {
+        transform: translateY(-6px);
+      }
+      .koleksi-item b {
+        display: block;
+        margin-bottom: 6px;
+      }
+      .koleksi-item span {
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.6;
+      }
+
+      /* ===== FOOTER ===== */
+      footer {
+        margin-top: 24px;
+        background: rgba(0, 0, 0, 0.35);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 34px 18px;
+      }
+      .footer-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+      footer h4 {
+        margin-bottom: 10px;
+        color: rgba(234, 242, 255, 0.95);
+        letter-spacing: -0.2px;
+      }
+      footer p,
+      footer a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      footer a:hover {
+        color: var(--text);
+      }
+
+      /* ===== TOAST ===== */
+      .toast {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        background: rgba(15, 23, 42, 0.88);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: var(--shadow);
+        border-radius: 16px;
+        padding: 14px 14px;
+        min-width: 280px;
+        display: none;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .toast .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand), var(--brand2));
+        margin-top: 4px;
+        flex: 0 0 auto;
+      }
+      .toast b {
+        display: block;
+        margin-bottom: 4px;
+      }
+      .toast span {
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.4;
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding-top: 34px;
+        }
+        .row {
+          grid-template-columns: 1fr;
+        }
+        nav {
+          padding: 12px 12px;
+        }
+        .menu {
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav>
+      <div class="nav-wrap">
+        <a class="brand" href="#home">
+          <div class="brand-badge">TT</div>
+          <div>
+            Tik Tak Top
+            <small>Computer Course</small>
+          </div>
+        </a>
+
+        <ul class="menu">
+          <li><a href="#home">🏠 Home</a></li>
+          <li><a href="#about">ℹ️ About</a></li>
+
+          <li class="dropdown">
+            <a class="drop" href="javascript:void(0)">🧩 Layanan ▾</a>
+            <div class="dropdown-content">
+              <a href="#pendaftaran">📝 Pendaftaran Anggota</a>
+              <a href="#informasi">📌 Informasi Layanan</a>
+            </div>
+          </li>
+
+          <li><a href="#koleksi">🗂️ Koleksi</a></li>
+          <li><a href="#kelas">🎓 Kelas</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- HERO / JUMBOTRON -->
+    <div class="hero" id="home">
+      <div class="hero-card">
+        <div class="pill">✨ Selamat Datang • Tik Tak Top Course</div>
+        <h1>Selamat Datang di Tik Tak Top Course</h1>
+        <p>
+          Daftar kursus secara online dengan tampilan modern. Pilih program yang
+          kamu suka, isi formulir, dan kami akan hubungi lewat WhatsApp.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#pendaftaran">🚀 Daftar Sekarang</a>
+          <a class="btn btn-ghost" href="#kelas">📚 Lihat Kelas</a>
+        </div>
+      </div>
+
+      <div class="hero-side">
+        <div class="stat">
+          <div class="stat-icon">⚡</div>
+          <div>
+            <b>Belajar Cepat</b>
+            <span
+              >Materi ringkas, latihan langsung, cocok buat pemula sampai
+              mahir.</span
+            >
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">🧠</div>
+          <div>
+            <b>Skill Siap Kerja</b>
+            <span
+              >Program disusun untuk kebutuhan industri dan portofolio.</span
+            >
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">🤝</div>
+          <div>
+            <b>Mentor Ramah</b>
+            <span>Pendampingan, tanya jawab, dan evaluasi progres.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="section-title">
+        <h2>About</h2>
+        <p>
+          Tik Tak Top adalah lembaga kursus komputer dengan fokus pada
+          pembelajaran praktis dan interaktif.
+        </p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin-bottom: 10px">🎯 Visi</h3>
+          <p style="color: var(--muted); line-height: 1.7">
+            Membantu peserta menjadi lebih siap menghadapi dunia digital melalui
+            pelatihan yang relevan.
+          </p>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom: 10px">✅ Misi</h3>
+          <p style="color: var(--muted); line-height: 1.7">
+            Menyediakan program kursus berkualitas, mentor kompeten, dan sistem
+            belajar yang mudah diikuti.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFORMASI LAYANAN -->
+    <section id="informasi">
+      <div class="section-title">
+        <h2>Informasi Layanan</h2>
+        <p>Berikut layanan yang tersedia untuk peserta Tik Tak Top Course.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin-bottom: 10px">📌 Konsultasi Program</h3>
+          <p style="color: var(--muted); line-height: 1.7">
+            Bingung pilih kelas? Kamu bisa konsultasi program sesuai minat dan
+            target skill.
+          </p>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom: 10px">🧾 Sertifikat</h3>
+          <p style="color: var(--muted); line-height: 1.7">
+            Sertifikat diberikan setelah menyelesaikan kelas dan evaluasi akhir.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PENDAFTARAN ANGGOTA -->
+    <section id="pendaftaran">
+      <div class="section-title">
+        <h2>Pendaftaran Anggota</h2>
+        <p>
+          Isi formulir di bawah ini (5 kolom sesuai ketentuan). Setelah submit,
+          akan muncul notifikasi.
+        </p>
+      </div>
+
+      <div class="card">
+        <form class="form" id="formDaftar">
+          <div class="row">
+            <div class="field">
+              <label>Nama Lengkap</label>
+              <input
+                type="text"
+                id="nama"
+                placeholder="Contoh: Anggun Pertiwi"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label>Program Kursus</label>
+              <select id="program" required>
+                <option value="" disabled selected>
+                  -- Pilih Program Kursus --
+                </option>
+                <option>Desain Grafis</option>
+                <option>Web Programming</option>
+                <option>Data Analysis</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>NIK / Nomor Induk Siswa</label>
+              <input
+                type="text"
+                id="nik"
+                placeholder="Masukkan NIK / NIS"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label>Nomor WhatsApp</label>
+              <input
+                type="tel"
+                id="wa"
+                placeholder="Contoh: 081234567890"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Alamat</label>
+            <textarea
+              id="alamat"
+              placeholder="Tulis alamat lengkap..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-submit" type="submit">
+              ✅ Kirim Pendaftaran
+            </button>
+            <button class="btn-reset" type="reset">↩️ Reset</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- KOLEKSI -->
+    <section id="koleksi">
+      <div class="section-title">
+        <h2>Koleksi</h2>
+        <p>
+          Contoh koleksi materi & modul pembelajaran yang tersedia untuk
+          peserta.
+        </p>
+      </div>
+
+      <div class="koleksi">
+        <div class="koleksi-item">
+          <b>📘 Modul HTML & CSS</b>
+          <span>Dasar layout, responsive, dan komponen UI sederhana.</span>
+        </div>
+        <div class="koleksi-item">
+          <b>📗 Modul Python</b>
+          <span
+            >Logika, tipe data, looping, fungsi, dan latihan project mini.</span
+          >
+        </div>
+        <div class="koleksi-item">
+          <b>📙 Modul Data</b>
+          <span>Excel untuk data, visualisasi sederhana, dan studi kasus.</span>
+        </div>
+        <div class="koleksi-item">
+          <b>📕 Modul Desain</b>
+          <span
+            >Dasar komposisi, warna, tipografi, dan tools desain grafis.</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- KELAS -->
+    <section id="kelas">
+      <div class="section-title">
+        <h2>Daftar Kelas</h2>
+        <p>Pilihan kelas/program kursus yang tersedia di Tik Tak Top.</p>
+      </div>
+
+      <div class="kelas">
+        <div class="kelas-card">
+          <h3>🌐 Kelas Dasar Web</h3>
+          <p>HTML, CSS, JavaScript dasar + mini project.</p>
+          <div class="tag">⏱️ 4 Minggu</div>
+        </div>
+
+        <div class="kelas-card">
+          <h3>🐍 Kelas Python Pemula</h3>
+          <p>Belajar Python dari nol sampai bisa membuat program sederhana.</p>
+          <div class="tag">⏱️ 4 Minggu</div>
+        </div>
+
+        <div class="kelas-card">
+          <h3>📊 Kelas Excel untuk Data</h3>
+          <p>Rumus penting, tabel, chart, dan analisis data dasar.</p>
+          <div class="tag">⏱️ 3 Minggu</div>
+        </div>
+
+        <div class="kelas-card">
+          <h3>🎨 Kelas Desain Grafis</h3>
+          <p>Dasar desain + praktik membuat poster dan konten.</p>
+          <div class="tag">⏱️ 5 Minggu</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-wrap">
+        <div>
+          <h4>Alamat</h4>
+          <p>Jl. Teknologi No. 10, NTB</p>
+        </div>
+
+        <div>
+          <h4>Contact</h4>
+          <p>
+            WhatsApp: 0812-3456-7890<br />
+            Email: info@tiktaktop.com
+          </p>
+        </div>
+
+        <div>
+          <h4>Sosial Media</h4>
+          <p>
+            <a href="#">Instagram: @tiktaktop</a><br />
+            <a href="#">Facebook: Tik Tak Top Course</a><br />
+            <a href="#">YouTube: Tik Tak Top</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <div class="dot"></div>
+      <div>
+        <b id="toastTitle">Terkirim!</b>
+        <span id="toastMsg">Pendaftaran berhasil disimpan.</span>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("formDaftar");
+      const toast = document.getElementById("toast");
+      const toastTitle = document.getElementById("toastTitle");
+      const toastMsg = document.getElementById("toastMsg");
+
+      function showToast(title, msg) {
+        toastTitle.textContent = title;
+        toastMsg.textContent = msg;
+        toast.style.display = "flex";
+        clearTimeout(window.__t);
+        window.__t = setTimeout(() => (toast.style.display = "none"), 3200);
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const nama = document.getElementById("nama").value.trim();
+        const program = document.getElementById("program").value.trim();
+        const nik = document.getElementById("nik").value.trim();
+        const alamat = document.getElementById("alamat").value.trim();
+        const wa = document.getElementById("wa").value.trim();
+
+        // Validasi sederhana
+        if (!nama || !program || !nik || !alamat || !wa) {
+          showToast("Oops!", "Lengkapi semua kolom dulu ya 🙂");
+          return;
+        }
+
+        if (wa.length < 10) {
+          showToast("Nomor WA kurang valid", "Minimal 10 digit ya.");
+          return;
+        }
+
+        // KIRIM DATA KE GOOGLE SHEETS
+        fetch(
+          "https://script.google.com/macros/s/AKfycbxOMSeJtZHED-RIywoRXtp0AZq6uxv7W5EaBu_Jgbz_mWPIUKZ7Y_Rq59kwIOed0T3Ehg/exec",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nama: nama,
+              program: program,
+              nik: nik,
+              alamat: alamat,
+              wa: wa,
+            }),
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            showToast(
+              "🎉 Berhasil!",
+              `Terima kasih ${nama}. Kamu daftar ${program}.`
+            );
+
+            form.reset();
+            document.getElementById("program").selectedIndex = 0;
+          })
+          .catch((err) => {
+            showToast("❌ Gagal", "Data tidak terkirim ke Google Sheets");
+          });
+      });
+    </script>
+  </body>
+</html>
